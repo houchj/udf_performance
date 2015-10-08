@@ -32,7 +32,8 @@ public class Application {
 		System.out.println("system initialized!");
 		
 		PerformanceTestService test = context.getBean(PerformanceTestService.class);
-		test.addOneRandomOrder();
+		//test.addRandomOrder();
+		test.addOrdersInThreads(context);
 	}
 
 }

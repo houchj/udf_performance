@@ -1,4 +1,4 @@
-do $$
+﻿do $$
 declare
 index integer := 1;
 begin
@@ -22,16 +22,22 @@ end $$;
 select * from orders;
 select * from orderlines;
 
+select count(*) "aaaaaaaaaaaaaaaaaaa" from orderlines;
+
 delete from orders;
+delete from orderlines;
 
 select * from orders where id = 12345;
 select * from orderLines where id = 123;
 
-alter table orders add "reservedString3" character varying;
+alter table orders add "reservedString1" character varying;
+alter table orders add "reservedInteger1" integer;
+alter table orders add "reservedDate2" date;
 
-alter table orders add "reservedInteger1" integer default 1;
+alter table orderlines add "reservedString2" character varying;
+alter table orderlines add "reservedInteger3" integer;
+alter table orderlines add "reservedDate3" date;
 
-alter table orders add "reservedDate1" date;
 
 update orders set "reservedString1" = 'defaultString';
 
