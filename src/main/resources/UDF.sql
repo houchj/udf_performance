@@ -22,7 +22,7 @@ end $$;
 select * from orders;
 select * from orderlines;
 
-select count(*) "aaaaaaaaaaaaaaaaaaa" from orderlines;
+select count(id) "aaaaaaaaaaaaaaaaaaa" from orderlines;
 
 delete from orders;
 delete from orderlines;
@@ -34,9 +34,9 @@ alter table orders add "reservedString1" character varying;
 alter table orders add "reservedInteger1" integer;
 alter table orders add "reservedDate2" date;
 
-alter table orderlines add "reservedString2" character varying;
-alter table orderlines add "reservedInteger3" integer;
-alter table orderlines add "reservedDate3" date;
+alter table orderlines add "reservedString3" character varying;
+alter table orderlines add "reservedInteger5" integer;
+alter table orderlines add "reservedDate4" date;
 
 
 update orders set "reservedString1" = 'defaultString';
