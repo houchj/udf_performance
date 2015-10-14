@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
@@ -11,6 +12,7 @@ import com.sap.hackthon.services.PerformanceTestService;
 
 @SpringBootApplication
 @EnableAutoConfiguration
+@ComponentScan(basePackages="com.sap.hackthon")
 @PropertySources({
 	@PropertySource("classpath:application.properties"),
 	@PropertySource("classpath:application_${app.env}.properties")
