@@ -12,7 +12,7 @@ import com.sap.hackthon.enumeration.UDFTypeEnum;
 import com.sap.hackthon.repository.PropertyMetaRepository;
 
 @Service
-@Transactional(rollbackFor = Exception.class)
+@Transactional
 public class PropertyMetaServiceImpl implements PropertyMetaService {
 
 	@Autowired

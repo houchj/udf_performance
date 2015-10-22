@@ -10,9 +10,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "OrderLines")
-@SequenceGenerator(name = "OrderLinesSeq", allocationSize = 1, sequenceName = "orderlines_seq")
+//@Entity
+//@Table(name = "T_ORDER_LINE")
+//@SequenceGenerator(name = "OrderLinesSeq", allocationSize = 1, sequenceName = "T_ORDER_LINE_SEQ")
 public class OrderLines {
 
 	@Id

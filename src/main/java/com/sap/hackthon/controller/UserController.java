@@ -28,8 +28,8 @@ public class UserController {
     public @ResponseBody boolean login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Map<String, String> validUsers = new HashMap<String, String>();
-        validUsers.put("A", "Tenant012");
-        validUsers.put("B", "Tenant004");
+        validUsers.put("T012", "Tenant012");
+        validUsers.put("T004", "Tenant004");
         if (!validUsers.containsKey(user.getUsername())) {
             return false;
         }

@@ -13,9 +13,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "Orders")
-@SequenceGenerator(name = "OrdersSeq", allocationSize = 1, sequenceName = "orders_seq")
+//@Entity
+//@Table(name = "T_ORDER")
+//@SequenceGenerator(name = "OrdersSeq", allocationSize = 1, sequenceName = "T_ORDER_SEQ")
 public class Orders {
 
 	@Id

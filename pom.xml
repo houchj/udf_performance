@@ -12,12 +12,8 @@
 	<name>udf_performance</name>
 
 	<description>udf_performance</description>
+
 	<dependencies>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>9.3-1102-jdbc4</version>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -25,22 +21,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-			<exclusions>
-				<exclusion>
-					<artifactId>hibernate-entitymanager</artifactId>
-					<groupId>org.hibernate</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.zalando.stups</groupId>
-			<artifactId>spring-boot-starter-data-jpa-eclipselink</artifactId>
-			<version>0.5.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>eclipselink</artifactId>
-			<version>2.5.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -56,7 +36,7 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.5.1</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
@@ -72,6 +52,12 @@
 			<artifactId>spring-aspects</artifactId>
 			<version>4.2.0.RELEASE</version>
 		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
@@ -84,8 +70,21 @@
 			<version>0.9.9</version>
 		</dependency>
 
-	</dependencies>
+      <dependency>
+        <groupId>com.sap.db.hdb</groupId>
+        <artifactId>com.sap.db.ngdbc</artifactId>
+        <version>1.00.68.384084</version>
+        <scope>provided</scope>
+      </dependency>
 
+      <dependency>
+        <groupId>com.sap.db.jdbc</groupId>
+        <artifactId>ngdbc</artifactId>
+        <version>1.90.1</version>
+        <scope>provided</scope>
+      </dependency>
+
+	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<start-class>com.sap.hackthon.Application</start-class>

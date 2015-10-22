@@ -3,15 +3,11 @@ package com.sap.hackthon;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 
-import com.sap.hackthon.config.MvcConfig;
+import com.sap.hackthon.services.UDFPerformanceTestService;
 
 @SpringBootApplication
 @EnableAutoConfiguration
@@ -31,7 +27,15 @@ public class Application {
 			System.setProperty("app.env", "local");
 		}
 		
-		SpringApplication.run(Application.class, args);			
+//		SpringApplication.run(Application.class, args);			
+		ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
+		
+		System.out.println("system initialized!");
+		
+		UDFPerformanceTestService test = context.getBean(UDFPerformanceTestService.class);
+		//PerformanceTestService test = context.getBean(PerformanceTestService.class);
+		//test.addRandomOrder();
+		test.addOrdersInThreads(context);
 	}
 
 }

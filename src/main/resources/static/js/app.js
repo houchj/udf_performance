@@ -4,7 +4,7 @@ appModule.controller('orderController', function ($scope,$http) {
 	
 	var urlBase="";
 	$scope.toggle=true;
-	$scope.propertities={ORDER_ID:"Order012000142199",TENANT_ID:"Tenant012",ORDER_DATE:"2015-09-25"};
+	$scope.propertities={ORDER_ID:"Order012000142199",TENANT_ID:"Tenant004",ORDER_DATE:"2015-09-25"};
 	
 	$scope.orders={};
 	$scope.showList=true;
@@ -25,12 +25,12 @@ appModule.controller('orderController', function ($scope,$http) {
 //		if(name=="ORDER_ID"){
 //			return false;
 //		}
-		if(name=="TENANT_ID"){
-			return false;
-		}
-		if(name=="ORDER_DATE"){
-			return false;
-		}
+//		if(name=="TENANT_ID"){
+//			return false;
+//		}
+//		if(name=="ORDER_DATE"){
+//			return false;
+//		}
 		
 		return true;
     }
@@ -188,7 +188,7 @@ appModule.controller('udfController', function ($scope,$http) {
     }
 
     $scope.deleteUDF=function deleteUDF(id){
-		 $http.delete(urlBase + '/propertiesMeta'+id,$scope.propertyMeta).
+		 $http.delete(urlBase + '/propertiesMeta/'+id,$scope.propertyMeta).
 		  success(function(data, status, headers) {
 			 //alert("Task added");
 			 findMetas();
