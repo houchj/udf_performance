@@ -123,7 +123,7 @@ public class PropertyMetaServiceImpl implements PropertyMetaService {
 	}
 
 	@Override
-	public int getMaxParamIndexByTenantIdAndObjectNameAndType(String tenantId,
+	public synchronized int getMaxParamIndexByTenantIdAndObjectNameAndType(String tenantId,
 			String objectName, UDFTypeEnum type) {
 		return propertyMetaRepository.findMaxParamIndexByTenantIdAndObjectNameAndType(tenantId, objectName, type);
 	}

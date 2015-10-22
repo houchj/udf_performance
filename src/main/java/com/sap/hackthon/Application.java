@@ -27,15 +27,15 @@ public class Application {
 			System.setProperty("app.env", "local");
 		}
 		
-//		SpringApplication.run(Application.class, args);			
-		ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
-		
-		System.out.println("system initialized!");
-		
-		UDFPerformanceTestService test = context.getBean(UDFPerformanceTestService.class);
-		//PerformanceTestService test = context.getBean(PerformanceTestService.class);
-		//test.addRandomOrder();
-		test.addOrdersInThreads(context);
+		SpringApplication.run(Application.class, args);			
+//		ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
+//		
+//		System.out.println("system initialized!");
+//		
+//		UDFPerformanceTestService test = context.getBean(UDFPerformanceTestService.class);
+//		//PerformanceTestService test = context.getBean(PerformanceTestService.class);
+//		//test.addRandomOrder();
+//		test.addOrdersInThreads(context);
 	}
 
 }

@@ -30,6 +30,7 @@ public class PropertyMetaController {
 			@RequestParam String objectName, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
+		tenantId="Tenant004";
 		if (tenantId == null) {
 			return null;
 		}

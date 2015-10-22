@@ -70,6 +70,7 @@ public class EntityController {
         }
         HttpSession session = request.getSession();
         String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
+		tenantId="Tenant004";
         if (tenantId == null) {
             return null;
         }
@@ -83,6 +84,7 @@ public class EntityController {
         }
         HttpSession session = request.getSession();
         String tenantId = (String) session.getAttribute(GlobalConstants.TENANT);
+		tenantId="Tenant004";
         if (tenantId == null) {
             return null;
         }
