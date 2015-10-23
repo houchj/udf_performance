@@ -49,6 +49,11 @@ public class EntityServiceImpl implements EntityService {
         Long seqVal = this.getSequenceValue(seqName);
         String insertStr = this.buildInsertClause(entity, tanentId, metas, seqVal);
         entityManager.createNativeQuery(insertStr).executeUpdate();
+//        try {
+//            Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
         entity.setProperty("ID", seqVal);
         return entity;
     }
@@ -172,6 +177,9 @@ public class EntityServiceImpl implements EntityService {
         
 
         for (PropertyMeta propertyMeta : metas) {
+        	if(!propertyMeta.isSystemField()){
+        		continue;
+        	}
             if (colNameBuilder.length() != 0) {
                 colNameBuilder.append(",");
                 colValueBuilder.append(",");

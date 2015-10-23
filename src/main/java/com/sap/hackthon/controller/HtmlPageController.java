@@ -65,4 +65,9 @@ public class HtmlPageController {
 		model.addAttribute("title", "Mainstay - Web");
 		return "orderView";
 	}
+
+	@RequestMapping(value = "/pf.html", method = RequestMethod.GET)
+	public String pfView(Model model) {
+		return "pf";
+	}
 }

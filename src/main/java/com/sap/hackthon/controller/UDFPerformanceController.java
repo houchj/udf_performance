@@ -61,15 +61,15 @@ public class UDFPerformanceController {
     public List<ScheduledFuture> startThreads() {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(100);
         List<ScheduledFuture> fs = new ArrayList<ScheduledFuture>();
-        for (int i = 0; i < 100; i++) {
-            String worker = "worker" + i;
-            Thread t = new WorkThread(worker);
-            ScheduledFuture f = executor.scheduleAtFixedRate(t, 1, 2, TimeUnit.SECONDS);
-            fs.add(f);
-        }
         Thread ddlT = new DDLThread();
         ScheduledFuture ddlF = executor.scheduleAtFixedRate(ddlT, 1, 2, TimeUnit.SECONDS);
         fs.add(ddlF);
+        for (int i = 0; i < 100; i++) {
+            String worker = "worker" + i;
+            Thread t = new WorkThread(worker);
+            ScheduledFuture f = executor.scheduleAtFixedRate(t, 1, 1, TimeUnit.SECONDS);
+            fs.add(f);
+        }
         return fs;
     }
     
@@ -96,7 +96,8 @@ class WorkThread extends Thread {
               System.out.println(workerName + ", order(" + id + "), "+format.format(from)+", "+format.format(to)+", "+ duration);
               //System.out.println(workerName + ", order(" + id + ") is added successfully in " + duration);
           } else {
-              System.out.println(workerName + ", failed to added order in " + duration);
+              System.out.println(workerName + ", fail, "+format.format(from)+", "+format.format(to)+", "+ duration);
+//              System.out.println(workerName + ", failed to added order in " + duration);
           }
       }
   }
@@ -117,8 +118,12 @@ class WorkThread extends Thread {
   	entity.setProperty("TENANT_ID", tenantId);
   	entity.setProperty("ORDER_DATE", "2015-09-25");
   	
-  	DynamicEntity rtn=entityService.create(entity, tenantId);
-    return rtn.getProperty("ID").toString();
+  	try {
+		DynamicEntity rtn=entityService.create(entity, tenantId);
+		return rtn.getProperty("ID").toString();
+	} catch (Exception e) {
+		return null;
+	}
   }
 
   public class DDLThread extends Thread {
@@ -140,7 +145,8 @@ class WorkThread extends Thread {
           if (isSuccess) {
               System.out.println(workerName + ", " + isSuccess + ", "+format.format(from)+", "+format.format(to)+", "+ duration);
           } else {
-              System.out.println(workerName + ", failed to added order in " + duration);
+              System.out.println(workerName + ", " + isSuccess + ", "+format.format(from)+", "+format.format(to)+", "+ duration);
+//              System.out.println(workerName + ", failed to added order in " + duration);
           }
       }
   }
@@ -158,8 +164,12 @@ class WorkThread extends Thread {
 		propertyMeta.setParamIndex(nextParamIndex);
      	propertyMeta.setDisplayName(internalName);
 		propertyMeta.setInternalName(internalName);
-		boolean rslt=metaService.create(propertyMeta);
-		return rslt;
+		try {
+			boolean rslt=metaService.create(propertyMeta);
+			return rslt;
+		} catch (Exception e) {
+			return false;
+		}
   }
 
   
