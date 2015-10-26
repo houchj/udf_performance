@@ -204,7 +204,7 @@ appModule.controller('udfController', function ($scope,$http) {
 	};
 });
 
-appModule.controller('pfController', function ($scope,$http) {
+appModule.controller('pfController', function ($scope,$http,$interval) {
 	
 	var urlBase="";
 	
@@ -236,7 +236,7 @@ appModule.controller('pfController', function ($scope,$http) {
         $scope.showList=true;
     }
     
-    findMetas();
+ //   $interval(findMetas,2000);
     
 //    $scope.showAddDiv=function showAddDiv(){
 //    	$scope.showList=!$scope.showList;

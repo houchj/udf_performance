@@ -16,23 +16,25 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sap.hackthon.dto.PFMessage;
 import com.sap.hackthon.entity.DynamicEntity;
 import com.sap.hackthon.entity.PropertyMeta;
 import com.sap.hackthon.enumeration.UDFTypeEnum;
 import com.sap.hackthon.services.EntityService;
 import com.sap.hackthon.services.PropertyMetaService;
-import com.sap.hackthon.services.UDFPerformanceTestService;
-import com.sap.hackthon.services.UDFPerformanceTestService.DDLThread;
 import com.sap.hackthon.utils.GlobalConstants;
 
 @Controller
 public class UDFPerformanceController {
+
+	@Autowired
+	private SimpMessagingTemplate template;
 
 	@Autowired
     private EntityService entityService;
@@ -93,6 +95,8 @@ class WorkThread extends Thread {
           Date to = new Date();
           Long duration = to.getTime() - from.getTime();
           if (id != null) {
+        	  PFMessage pfMessage=new PFMessage(workerName,duration.toString(), format.format(from),format.format(to));
+      		  template.convertAndSend("/topic/greetings", pfMessage);
               System.out.println(workerName + ", order(" + id + "), "+format.format(from)+", "+format.format(to)+", "+ duration);
               //System.out.println(workerName + ", order(" + id + ") is added successfully in " + duration);
           } else {
@@ -143,6 +147,8 @@ class WorkThread extends Thread {
           Date to = new Date();
           Long duration = to.getTime() - from.getTime();
           if (isSuccess) {
+        	  PFMessage pfMessage=new PFMessage(workerName,duration.toString(), format.format(from),format.format(to));
+      		  template.convertAndSend("/topic/greetings", pfMessage);
               System.out.println(workerName + ", " + isSuccess + ", "+format.format(from)+", "+format.format(to)+", "+ duration);
           } else {
               System.out.println(workerName + ", " + isSuccess + ", "+format.format(from)+", "+format.format(to)+", "+ duration);

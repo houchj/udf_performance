@@ -3,7 +3,100 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script src="../js/angular.min.js" type="text/javascript"></script>
 <script src="../js/app.js" type="text/javascript"></script>
+<script src="../js/sockjs-0.3.4.js"></script>
+<script src="../js/stomp.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization',
+       'version':'1','packages':['timeline']}]}"></script>
 <title>PF</title>
+<script type="text/javascript">
+//	google.setOnLoadCallback(drawChart);
+	
+	var cnt=0;
+	var timelineDate=[
+//	             	    [ 'worker5', '3162', '2015-10-22T16:49:14.435',  '2015-10-22T16:49:17.597' ],
+//	             	    [ 'worker5', '2759', '2015-10-22T16:49:18.848',  '2015-10-22T16:49:21.607' ]
+//             	    [ 'worker5', '3162', new Date(0,0,0,0,49,14,435),  new Date(0,0,0,0,49,17,597) ],
+//             	    [ 'worker5', '2759', new Date(0,0,0,0,49,18,848),  new Date(0,0,0,0,49,21,607) ]
+             	    ];
+	
+	
+	function drawChart() {
+	
+	  var container = document.getElementById('example5.1');
+	  var chart = new google.visualization.Timeline(container);
+	  var dataTable = new google.visualization.DataTable();
+	  dataTable.addColumn({ type: 'string', id: 'Workname' });
+	  dataTable.addColumn({ type: 'string', id: 'Length' });
+	  dataTable.addColumn({ type: 'datetime', id: 'Start' });
+	  dataTable.addColumn({ type: 'datetime', id: 'End' });
+	  dataTable.addRows(timelineDate);
+/* 	  dataTable.addRows([
+	    [ 'Magnolia Room', 'Beginning JavaScript',       new Date('2015-10-22T16:49:14.848'),  new Date('2015-10-22T16:49:17.607') ],
+	    [ 'Magnolia Room', 'Intermediate JavaScript',    new Date(0,0,0,14,0,0),  new Date(0,0,0,15,30,0) ],
+	    [ 'Magnolia Room', 'Advanced JavaScript',        new Date(0,0,0,16,0,0),  new Date(0,0,0,17,30,0) ],
+	    [ 'Willow Room',   'Beginning Google Charts',    new Date(0,0,0,12,30,0), new Date(0,0,0,14,0,0) ],
+	    [ 'Willow Room',   'Intermediate Google Charts', new Date(0,0,0,14,30,0), new Date(0,0,0,16,0,0) ],
+	    [ 'Willow Room',   'Advanced Google Charts',     new Date(0,0,0,16,30,0), new Date(0,0,0,18,0,0) ]
+	    ]);
+ */	
+	  var options = {
+	    timeline: { colorByRowLabel: true }
+	  };
+	
+	  chart.draw(dataTable, options);
+	}
+//-------------------------------------------------------------
+    var stompClient = null;
+    
+    function setConnected(connected) {
+    	document.getElementById('connect').disabled = connected;
+        document.getElementById('disconnect').disabled = !connected;
+        document.getElementById('conversationDiv').style.visibility = connected ? 'visible' : 'hidden';
+        document.getElementById('response').innerHTML = '';
+    }
+    
+    function connect() {
+        var socket = new SockJS('/hello');
+        stompClient = Stomp.over(socket);            
+        stompClient.connect({}, function(frame) {
+            setConnected(true);
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/greetings', function(message){
+            	var content=JSON.parse(message.body);
+            	var data=[content.name, content.length, new Date(content.startTime), new Date(content.endTime)]
+            	timelineDate.push(data);
+            	cnt++;
+            	if(cnt>=50){
+            		cnt=0;
+                	drawChart();
+            	}
+                //showGreeting(message.body);
+                //showGreeting(JSON.parse(greeting.body).content);
+            });
+        });
+    }
+    
+    function disconnect() {
+        if (stompClient != null) {
+            stompClient.disconnect();
+        }
+        setConnected(false);
+        console.log("Disconnected");
+    }
+    
+    function sendName() {
+        var name = document.getElementById('name').value;
+        stompClient.send("/app/hello", {}, JSON.stringify({ 'name': name }));
+    }
+    
+    function showGreeting(message) {
+        var response = document.getElementById('response');
+        var p = document.createElement('p');
+        p.style.wordWrap = 'break-word';
+        p.appendChild(document.createTextNode(message));
+        response.appendChild(p);
+    }
+</script>
 </head>
 <body ng-app="myApp">
 
@@ -14,6 +107,14 @@
 		<button ng-disabled="isStarted" ng-click="start()">Start</button>
 		<button ng-disabled="!isStarted" ng-click="stop()">Stop</button>
 	</div>
+
+    <div>
+        <button id="connect" onclick="connect();">Connect</button>
+        <button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
+    </div>
+    <div id="conversationDiv">
+        <p id="response"></p>
+    </div>
 
 	<div class="dispDiv" ng-show="showList">
 		<h3>Order Table</h3>
@@ -94,6 +195,8 @@
 		<button ng-click="addMeta()">Add</button>
 	</div> -->
 </div>
+
+<div id="example5.1" style="height: 100%;"></div>
 
 </body>
 </html>
