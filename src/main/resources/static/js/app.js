@@ -222,6 +222,7 @@ appModule.controller('pfController', function ($scope,$http,$interval) {
 	$scope.meta2Array = [];
 	$http.defaults.headers.post["Content-Type"] = "application/json";
 
+	$scope.startDDL=false;
     function findMetas() {
         $http.post(urlBase + '/propertiesMeta/getByTenantIdAndObjectName?objectName=T_ORDER').
             success(function (data) {
@@ -253,7 +254,7 @@ appModule.controller('pfController', function ($scope,$http,$interval) {
     $scope.isStarted=false;
     
     $scope.start=function(){
-        $http.get(urlBase + '/start').
+        $http.get(urlBase + '/start?startDDL='+$scope.startDDL).
         success(function (data) {
             $scope.isStarted=true;
         });

@@ -20,6 +20,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sap.hackthon.dto.PFMessage;
@@ -43,10 +44,10 @@ public class UDFPerformanceController {
     private PropertyMetaService metaService; 
 
     @RequestMapping(method = RequestMethod.GET, value = "start")
-    public @ResponseBody void start(HttpServletRequest request)
+    public @ResponseBody void start(@RequestParam Boolean startDDL, HttpServletRequest request)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        List<ScheduledFuture> fs=startThreads();
+        List<ScheduledFuture> fs=startThreads(startDDL);
         session.setAttribute("threads", fs);
     }
 
@@ -60,12 +61,20 @@ public class UDFPerformanceController {
 		}
     }
 
-    public List<ScheduledFuture> startThreads() {
+    public List<ScheduledFuture> startThreads(Boolean startDDL) {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(100);
         List<ScheduledFuture> fs = new ArrayList<ScheduledFuture>();
-        Thread ddlT = new DDLThread();
-        ScheduledFuture ddlF = executor.scheduleAtFixedRate(ddlT, 1, 2, TimeUnit.SECONDS);
-        fs.add(ddlF);
+        if(startDDL){
+            Thread ddlT = new DDLThread();
+            ScheduledFuture ddlF = executor.scheduleAtFixedRate(ddlT, 1, 1, TimeUnit.SECONDS);
+            fs.add(ddlF);
+        }
+//        try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
         for (int i = 0; i < 100; i++) {
             String worker = "worker" + i;
             Thread t = new WorkThread(worker);
@@ -97,7 +106,8 @@ class WorkThread extends Thread {
           if (id != null) {
         	  PFMessage pfMessage=new PFMessage(workerName,duration.toString(), format.format(from),format.format(to));
       		  template.convertAndSend("/topic/greetings", pfMessage);
-              System.out.println(workerName + ", order(" + id + "), "+format.format(from)+", "+format.format(to)+", "+ duration);
+              System.out.println(workerName + "\torder(" + id + ")\t"+format.format(from)+"\t"+format.format(to)+"\t"+ duration);
+//              System.out.println(workerName + ", order(" + id + "), "+format.format(from)+", "+format.format(to)+", "+from.getTime()+", "+to.getTime()+", "+ duration);
               //System.out.println(workerName + ", order(" + id + ") is added successfully in " + duration);
           } else {
               System.out.println(workerName + ", fail, "+format.format(from)+", "+format.format(to)+", "+ duration);
@@ -149,7 +159,7 @@ class WorkThread extends Thread {
           if (isSuccess) {
         	  PFMessage pfMessage=new PFMessage(workerName,duration.toString(), format.format(from),format.format(to));
       		  template.convertAndSend("/topic/greetings", pfMessage);
-              System.out.println(workerName + ", " + isSuccess + ", "+format.format(from)+", "+format.format(to)+", "+ duration);
+              System.out.println(workerName + "\t" + isSuccess + "\t"+format.format(from)+"\t"+format.format(to)+"\t"+ duration);
           } else {
               System.out.println(workerName + ", " + isSuccess + ", "+format.format(from)+", "+format.format(to)+", "+ duration);
 //              System.out.println(workerName + ", failed to added order in " + duration);
